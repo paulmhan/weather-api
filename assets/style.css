@@ -1,4 +1,17 @@
+body{
+    height: 100%;
+}
+
 .searchdiv{
     padding:20px;
+    height: 1000px;
+    width: 500px;
+    margin-left: 0px;
+    border: 3px solid black;
+}
+
+.weather{
+    border: 3px solid black;
+    text-align: center;
     height: auto;
 }
