@@ -28,9 +28,10 @@ function getWeather(city){
       }).then(function(response) {
         let currentCard = $("<div>").attr("class", "card bg-light");
         $(".weather").append(currentCard)
+        console.log(response);
       });
 }
 
 
-getWeather();
+getWeather("Austin");
 
