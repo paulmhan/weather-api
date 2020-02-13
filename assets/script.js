@@ -3,15 +3,11 @@ let currentLocation;
 $("#searchbtn").on("click",function(){
     event.preventDefault();
     let loc = $("#search-input").val().trim();
-    //if location isnt empty
-    if (loc !== ""){
-        clearCity();
-        currentLoc = loc;
-        //clears search field value
-        $("search-input").val("");
-        getWeather(loc); 
-    }
-})
+    clearCity();
+    $("search-input").val("");
+    getWeather(loc); 
+
+});
 
 function clearCity(){
     //clears weather for current location
@@ -27,11 +23,22 @@ function getWeather(city){
         method: "GET"
       }).then(function(response) {
         let currentCard = $("<div>").attr("class", "card bg-light");
-        $(".weather").append(currentCard)
+        $(".weather").append(currentCard);
+        let cityName = $("<div>").attr("class", "name").text(`Current weather for ${response.name}`);
+        currentCard.append(cityName);
         console.log(response);
+        
+        // gets info
+        let textDiv = $("<div>").attr("class", "col-md-8");
+        let cardBody = $("<div>").attr("class", "card-body");
+        textDiv.append(cardBody);
+        cardBody.append($("<h3>").attr("class", "card-title").text(response.name));
+        cardBody.append($("<p>").attr("class", "card-text").html("Temperature: " + response.main.temp));
+        console.log(response.main.temp);
+        cardBody.append($("<p>").attr("class", "card-text").text("Humidity: " + response.main.humidity + "%"));
+        cardBody.append($("<p>").attr("class", "card-text").text("Wind Speed: " + response.wind.speed + " MPH"));
+        $(".weather").append(textDiv);
+        
       });
 }
-
-
-getWeather("Austin");
 
