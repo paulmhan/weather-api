@@ -1,4 +1,3 @@
-let currentLocation;
 
 $("#searchbtn").on("click",function(){
     event.preventDefault();
