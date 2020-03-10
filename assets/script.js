@@ -1,4 +1,20 @@
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//mycode below
+
 $("#searchbtn").on("click",function(){
     event.preventDefault();
     let loc = $("#search-input").val().trim();
