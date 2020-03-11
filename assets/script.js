@@ -1,72 +1,96 @@
+let savedLocations = [];
+let currentLoc;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//mycode below
-
-$("#searchbtn").on("click",function(){
-    event.preventDefault();
-    let loc = $("#search-input").val().trim();
-    clearCity();
-    $("search-input").val("");
-    getWeather(loc); 
-
-});
-
-function clearCity(){
-    //clears weather for current location
-    $(".weather").empty();
-
+function init() {
+    savedLocations = JSON.parse(localStorage.getItem("cities"));
+    if (savedLocations) {
+        currentLoc = savedLocations[savedLocations.length - 1];
+        showPrevious();
+        getCurrent(currentLoc);
+    }   
 }
 
+function showPrevious() {
+    if (savedLocations) {
+        $("#prevSearches").empty();
+        let buttons = $("<div>").attr("class", "list-group");
+        for (let i = 0; i < savedLocations.length; i++) {
+            let locBtn = $("<a>").attr("href", "#").attr("id", "loc-btn").text(savedLocations[i]);
+            if (savedLocations[i] == currentLoc){
+                locBtn.attr("class", "list-group-item list-group-item-action active");
+            }
+            else {
+                locBtn.attr("class", "list-group-item list-group-item-action");
+            }
+            buttons.prepend(locBtn);
+        }
+        $("#prevSearches").append(buttons);
+    }
+}
 
-function getWeather(city){
-    let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=56e230dcae6b8601830ff7faa6ebd840";
+function getCurrent(city) {
+    const queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=7e4c7478cc7ee1e11440bf55a8358ec3&units=imperial";
     $.ajax({
         url: queryURL,
-        method: "GET"
-      }).then(function(response) {
-        let currentCard = $("<div>").attr("class", "card bg-light");
-        $(".weather").append(currentCard);
-        let cityName = $("<div>").attr("class", "name").text(`Current weather for ${response.name}`);
-        currentCard.append(cityName);
-        
-        // gets info
+        method: "GET",
+        error: function (){
+            savedLocations.splice(savedLocations.indexOf(city), 1);
+            localStorage.setItem("cities", JSON.stringify(savedLocations));
+            init();
+        }
+    }).then(function (response) {
+        //create the card
+        let currCard = $("<div>").attr("class", "card bg-light");
+        $("#earthforecast").append(currCard);
+
+        let cardRow = $("<div>").attr("class", "row no-gutters");
+        currCard.append(cardRow);
+
         let textDiv = $("<div>").attr("class", "col-md-8");
         let cardBody = $("<div>").attr("class", "card-body");
         textDiv.append(cardBody);
         cardBody.append($("<h3>").attr("class", "card-title").text(response.name));
-        let tempF = response.main.temp * 1.8 - 459.67;
-        tempF =  Math.round(tempF*10)/10
-        cardBody.append($("<p>").attr("class", "card-text").html("Temperature: " + tempF + "F"));
-        console.log(tempF);
+        cardBody.append($("<p>").attr("class", "card-text").html("Temperature: " + response.main.temp + " &#8457;"));
         cardBody.append($("<p>").attr("class", "card-text").text("Humidity: " + response.main.humidity + "%"));
         cardBody.append($("<p>").attr("class", "card-text").text("Wind Speed: " + response.wind.speed + " MPH"));
-        $(".weather").append(textDiv);
-        
+        cardRow.append(textDiv);
+    });
 
-        //uv index
-        let uvURL = "https://api.openweathermap.org/data/2.5/uvi?appid=7e4c7478cc7ee1e11440bf55a8358ec3&lat=" + response.coord.lat + "&lon=" + response.coord.lat;
-        $.ajax({
-            url: uvURL,
-            method: "GET"
-        }).then(function (uvresponse) {
-            let uvindex = uvresponse.value;
-            let uvdisp = $("<p>").attr("class", "card-text").text("UV Index: ");
-            uvdisp.append($("<span>").attr("class", "uvindex").text(uvindex));
-            cardBody.append(uvdisp);
-        });
-      });
+};
+
+
+function clear() {
+    $("#earthforecast").empty();
 }
 
+function saveLoc(loc){
+    if (savedLocations === null) {
+        savedLocations = [loc];
+    }
+    else if (savedLocations.indexOf(loc) === -1) {
+        savedLocations.push(loc);
+    }
+    localStorage.setItem("cities", JSON.stringify(savedLocations));
+    showPrevious();
+}
+
+$("#searchbtn").on("click", function () {
+    event.preventDefault();
+    let loc = $("#searchinput").val();
+    if (loc !== "") {
+        clear();
+        currentLoc = loc;
+        saveLoc(loc);
+        $("#searchinput").val("");
+        getCurrent(loc);
+    }
+});
+
+$(document).on("click", "#loc-btn", function () {
+    clear();
+    currentLoc = $(this).text();
+    showPrevious();
+    getCurrent(currentLoc);
+});
+
+init();
