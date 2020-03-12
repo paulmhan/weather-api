@@ -1,41 +1,29 @@
 # Weather API Dashboard
 
-Created a API 
+An app that uses the OpenWeather API to get the current temperature, humidity, and wind speed at any city in the world. 
 
-- Built a Developer Profile Generator using the GitHub API
+Previous searches will be saved into local storage, and a button will appear for easy access to previous searches. 
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-```bash
-# Install all dependencies 
-example: npm i axios
-
-# Run
-node index.js
-```
 
 ### Guidelines:
 
-- Proceeds as follows:
+Proceeds as follows:
 
-After running node index.js, the user will be prompted for his or her **GitHub Username** and **favorite color**, which will be used as the background color for cards.
+Enter the name of a city into the search box, then click the search button. 
 
-The PDF will be populated with the following:
+The city name will be displayed along with :
 
-- Profile image
-- User name
-- Links to the following:
-  - User GitHub profile
-  - User blog
-- User bio
-- Number of public repositories
-- Number of followers
-- Number of users following
+- Temperature
+- Humidity
+- Wind Speed
+
+![Alt text](./assets/images/front-page.png?raw=true)
+
 
 ## Built With
 
 - [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)
 - [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)
 - [Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+- [OpenWeather](https://openweathermap.org/)
+- [Bootstrap 4](https://getbootstrap.com/)
