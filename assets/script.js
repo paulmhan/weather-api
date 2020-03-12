@@ -1,7 +1,7 @@
 let savedLocations = [];
 let currentLoc;
 
-function init() {
+let init = () => {
     savedLocations = JSON.parse(localStorage.getItem("cities"));
     if (savedLocations) {
         currentLoc = savedLocations[savedLocations.length - 1];
@@ -10,7 +10,7 @@ function init() {
     }   
 }
 
-function showPrevious() {
+let showPrevious = () => {
     if (savedLocations) {
         $("#prevSearches").empty();
         let buttons = $("<div>").attr("class", "list-group");
@@ -28,7 +28,7 @@ function showPrevious() {
     }
 }
 
-function getCurrent(city) {
+let getCurrent = city => {
     const queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=7e4c7478cc7ee1e11440bf55a8358ec3&units=imperial";
     $.ajax({
         url: queryURL,
@@ -59,11 +59,11 @@ function getCurrent(city) {
 };
 
 
-function clear() {
+let  clear = () => {
     $("#earthforecast").empty();
 }
 
-function saveLoc(loc){
+let saveLoc = loc => {
     if (savedLocations === null) {
         savedLocations = [loc];
     }
